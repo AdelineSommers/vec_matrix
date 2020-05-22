@@ -48,6 +48,19 @@ public:
 		return *this;
 	}
 
+	vector operator + (const vector& vec)
+	{
+		vector tmp;
+		if (this->size != vec.size)
+			throw "Incompatible dimensions";
+		tmp.size = this->size;
+		tmp.data = new int[this->size];
+		for (int i = 0; i < tmp.size; i++)
+			tmp.data[i] = this->data[i] + vec.data[i];
+		std::cout << "Operator '+' has been used \n";
+		return tmp;
+	}
+
 	vector operator * (const vector& vec)
 	{
 		vector tmp;
@@ -149,6 +162,26 @@ public:
 	}
 
 
+	matrix operator + (const matrix& mat)
+	{
+		matrix tmp;
+		if (this->col != mat.col && this->row != mat.row)
+			throw "Incompatible dimensions";
+		tmp.row = this->row;
+		tmp.col = this->col;
+		tmp.data = new int* [this->row];
+		for (int i = 0; i < tmp.row; i++)
+			tmp.data[i] = new int[tmp.col];//создание массива
+
+		for (int i = 0; i < tmp.row; i++)
+			for (int j = 0; j < tmp.col; j++)
+			{
+				tmp.data[i][j] = this->data[i][j] + mat.data[i][j];
+			}
+		std::cout << "Operator '+' has been used \n";
+		return tmp;
+	}
+
 	matrix operator * (const matrix& mat)
 	{
 		matrix tmp;
@@ -229,11 +262,20 @@ int main()
 		std::cout << "Fail! Incompatible dimensions \n";
 	}
 	a = b;
+	try
+	{
+		a = a + b;
+	}
+	catch (...)
+	{
+		std::cout << "Fail! Incompatible dimensions \n";
+	}
 	std::cout << a;
 	matrix c(4, 7);
 	c = c * 2;
 	std::cout << c;
 	matrix d(7, 3);
+
 	try
 	{
 		c = c * d;
@@ -244,7 +286,14 @@ int main()
 	}
 	std::cout << c;
 	c = d;
-
+	try
+	{
+		c = c + d;
+	}
+	catch (...)
+	{
+		std::cout << "Fail! Incompatible dimensions \n";
+	}
 	std::cout << c;
 	return 0;
 }
