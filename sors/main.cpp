@@ -1,5 +1,7 @@
+
 #include <iostream>
 #include <iomanip>
+#include <stdexcept>
 
 class vector
 {
@@ -44,6 +46,30 @@ public:
 			data[i] = vec.data[i];
 		std::cout << "Operator '=' has been used \n";
 		return *this;
+	}
+
+	vector operator * (const vector& vec)
+	{
+		vector tmp;
+		if (this->size != vec.size)
+			throw "Incompatible dimensions";
+		tmp.size = this->size;
+		tmp.data = new int[this->size];
+		for (int i = 0; i < tmp.size; i++)
+			tmp.data[i] = this->data[i] * vec.data[i];
+		std::cout << "Operator '*' has been used \n";
+		return tmp;
+	}
+
+	vector operator * (float num)
+	{
+		vector tmp;
+		tmp.size = this->size;
+		tmp.data = new int[this->size];
+		for (int i = 0; i < tmp.size; i++)
+			tmp.data[i] = this->data[i] * num;
+		std::cout << "Operator '*' has been used \n";
+		return tmp;
 	}
 
 	friend std::ostream& operator<< (std::ostream& out, const vector& vec);
@@ -122,6 +148,46 @@ public:
 		return *this;
 	}
 
+
+	matrix operator * (const matrix& mat)
+	{
+		matrix tmp;
+		if (this->col != mat.row)
+			throw "Incompatible dimensions";
+		tmp.row = this->row;
+		tmp.col = mat.col;
+		tmp.data = new int* [this->row];
+		for (int i = 0; i < tmp.row; i++)
+			tmp.data[i] = new int[tmp.col];//создание массива
+
+		for (int i = 0; i < tmp.row; i++)
+			for (int j = 0; j < tmp.col; j++)
+			{
+				tmp.data[i][j] = 0;
+				for (int k = 0; k < tmp.col; k++)
+				{
+					tmp.data[i][j] += this->data[i][k] * mat.data[k][j];
+				}
+
+			}
+		std::cout << "Operator '*' has been used \n";
+		return tmp;
+	}
+
+	matrix operator * (float num)
+	{
+		matrix tmp;
+		tmp.row = this->row;
+		tmp.col = this->col;
+		tmp.data = new int* [this->row];
+		for (int i = 0; i < tmp.row; i++)
+			tmp.data[i] = new int[this->col];
+		for (int i = 0; i < tmp.row; i++)
+			for (int j = 0; j < tmp.col; j++)
+				tmp.data[i][j] = this->data[i][j] * num;
+		std::cout << "Operator '*' has been used \n";
+		return tmp;
+	}
 	friend std::ostream& operator<< (std::ostream& out, const matrix& mat);
 
 	~matrix()
@@ -148,13 +214,37 @@ std::ostream& operator<< (std::ostream& out, const matrix& mat)
 int main()
 {
 	vector a(5);
+	std::cout << a;
+	a = a * 4;
+
+	std::cout << a;
 	vector b(8);
+	std::cout << b;
+	try
+	{
+		b = a * b;
+	}
+	catch (...)
+	{
+		std::cout << "Fail! Incompatible dimensions \n";
+	}
 	a = b;
 	std::cout << a;
 	matrix c(4, 7);
+	c = c * 2;
+	std::cout << c;
 	matrix d(7, 3);
+	try
+	{
+		c = c * d;
+	}
+	catch (...)
+	{
+		std::cout << "Fail! Incompatible dimensions \n";
+	}
+	std::cout << c;
 	c = d;
+
 	std::cout << c;
 	return 0;
 }
-
