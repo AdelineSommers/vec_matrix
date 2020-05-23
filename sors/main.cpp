@@ -209,7 +209,7 @@ public:
 
 	matrix operator * (int num)
 	{
-		matrix <T> tmp;
+		matrix tmp;
 		tmp.row = this->row;
 		tmp.col = this->col;
 		tmp.data = (T**) new T * [this->row];
@@ -244,62 +244,114 @@ std::ostream& operator<< (std::ostream& out, const matrix <int>& mat)
 }
 
 
+
+
 typedef matrix <int> IntMat;
 typedef vector <int> IntVec;
 
 
 int main()
 {
-	vector <int> a(5);
-	std::cout << a;
-	a = a * 4;
+	std::cout << "Do you want to create vector? (Write '1' or '0') ";
+	int ask1;
 
-	std::cout << a;
-	vector <int> b(8);
-	std::cout << b;
-	try
+	std::cin >> ask1;
+
+	if (ask1 == 1)
 	{
-		b = a * b;
-	}
-	catch (...)
-	{
-		std::cout << "Fail! Incompatible dimensions \n";
-	}
-	a = b;
-	try
-	{
-		a = a + b;
-	}
-	catch (...)
-	{
-		std::cout << "Fail! Incompatible dimensions \n";
-	}
-	std::cout << a;
+		std::cout << "enter size of vector: ";
+		int m;
+		std::cin >> m;
+		vector <int> a(m);
+		std::cout << a;
+		std::cout << "enter size of vector: ";
+		int k;
+		std::cin >> k;
+		vector <int> b(k);
+		std::cout << b;
+
+		try
+		{
+			a = a + b;
+			std::cout << a;
+		}
+		catch (...)
+		{
+			std::cout << "Fail! Incompatible dimensions \n";
+		}
+		
+		std::cout << "enter number: ";
+		int num1;
+		std::cin >> num1;
+		a = a * num1;
+
+		std::cout << a;
 
 
-	matrix <int> c(4, 7);
-	c = c * 2;
-	std::cout << c;
-	matrix <int> d(7, 3);
+		try
+		{
+			b = a * b;
+			std::cout << b;
+		}
+		catch (...)
+		{
+			std::cout << "Fail! Incompatible dimensions \n";
+		}
+		
+		a = b;
+		std::cout << a;
+	}
 
-	try
+
+
+
+
+	std::cout << "Do you want to create matrix? (Write '1' or '0') ";
+	int ask2;
+	std::cin >> ask2;
+	if (ask2 == 1)
 	{
-		c = c * d;
+		std::cout << "enter size of matrix (row and column): ";
+		int m, n;
+		std::cin >> m;
+		std::cin >> n;
+		matrix <int> c(m, n);
+		std::cout << c;
+		std::cout << "enter size of matrix (row and column): ";
+		int k, l;
+		std::cin >> k;
+		std::cin >> l;
+		matrix <int> d(k, l);
+		std::cout << d;
+		std::cout << "enter number: ";
+		int num2;
+		std::cin >> num2;
+		c = c * num2;
+		std::cout << c;
+		try
+		{
+			c = c * d;
+			std::cout << c;
+		}
+		catch (...)
+		{
+			std::cout << "Fail! Incompatible dimensions \n";
+		}
+		
+
+		try
+		{
+			c = c + d;
+			std::cout << c;
+		}
+		catch (...)
+		{
+			std::cout << "Fail! Incompatible dimensions \n";
+		}
+		
+		c = d;
+		std::cout << c;
 	}
-	catch (...)
-	{
-		std::cout << "Fail! Incompatible dimensions \n";
-	}
-	std::cout << c;
-	c = d;
-	try
-	{
-		c = c + d;
-	}
-	catch (...)
-	{
-		std::cout << "Fail! Incompatible dimensions \n";
-	}
-	std::cout << c;
+
 	return 0;
 }
