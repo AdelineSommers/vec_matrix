@@ -2,11 +2,11 @@
 #include <iostream>
 #include <iomanip>
 #include <stdexcept>
-
+template <typename T>
 class vector
 {
 protected:
-	int* data;
+	T* data;
 
 	int size;
 public:
@@ -14,11 +14,11 @@ public:
 	{
 		data = nullptr;
 
-		int size = 0;
+		size = 0;
 	}
 	vector(int n)
 	{
-		data = new int[n];
+		data = (T*) new T[n];
 		for (int i = 0; i < n; i++)
 			data[i] = i;
 		size = n;
@@ -28,7 +28,7 @@ public:
 	vector(const vector& copy)
 	{
 		size = copy.size;
-		data = new int[copy.size];
+		data = (T*) new T[copy.size];
 		for (int i = 0; i < copy.size; i++)
 			data[i] = copy.data[i];
 		std::cout << "Copy of vector has been created \n";
@@ -40,7 +40,7 @@ public:
 		size = vec.size;
 		if (data != nullptr)
 			delete[] data;
-		data = new int[vec.size];
+		data = (T*) new T[vec.size];
 
 		for (int i = 0; i < vec.size; i++)
 			data[i] = vec.data[i];
@@ -54,7 +54,7 @@ public:
 		if (this->size != vec.size)
 			throw "Incompatible dimensions";
 		tmp.size = this->size;
-		tmp.data = new int[this->size];
+		tmp.data = (T*) new T[this->size];
 		for (int i = 0; i < tmp.size; i++)
 			tmp.data[i] = this->data[i] + vec.data[i];
 		std::cout << "Operator '+' has been used \n";
@@ -67,18 +67,18 @@ public:
 		if (this->size != vec.size)
 			throw "Incompatible dimensions";
 		tmp.size = this->size;
-		tmp.data = new int[this->size];
+		tmp.data = (T*) new T[this->size];
 		for (int i = 0; i < tmp.size; i++)
 			tmp.data[i] = this->data[i] * vec.data[i];
 		std::cout << "Operator '*' has been used \n";
 		return tmp;
 	}
 
-	vector operator * (float num)
+	vector operator * (int num)
 	{
 		vector tmp;
 		tmp.size = this->size;
-		tmp.data = new int[this->size];
+		tmp.data = (T*) new T[this->size];
 		for (int i = 0; i < tmp.size; i++)
 			tmp.data[i] = this->data[i] * num;
 		std::cout << "Operator '*' has been used \n";
@@ -94,7 +94,7 @@ public:
 
 
 };
-std::ostream& operator<< (std::ostream& out, const vector& vec)
+std::ostream& operator<< (std::ostream& out, const vector <int>& vec)
 {
 
 	for (int j = 0; j < vec.size; j++)
@@ -103,27 +103,27 @@ std::ostream& operator<< (std::ostream& out, const vector& vec)
 	return out;
 }
 
-
+template <typename T>
 class matrix
 {
 protected:
-	int** data;
-	int row;
-	int col;
+	T** data;
+	int  row;
+	int  col;
 
 public:
 	matrix()
 	{
 		data = nullptr;
 
-		int col = 0;
-		int row = 0;
+		col = 0;
+		row = 0;
 	}
 	matrix(int n, int m)
 	{
-		data = new int* [n];
+		data = (T**) new T * [n];
 		for (int i = 0; i < n; i++)
-			data[i] = new int[m];
+			data[i] = (T*) new T[m];
 		for (int i = 0; i < n; i++)
 			for (int j = 0; j < m; j++)
 				data[i][j] = i + j;
@@ -135,9 +135,9 @@ public:
 	{
 		row = copy.row;
 		col = copy.col;
-		data = new int* [copy.row];
+		data = (T**) new T * [copy.row];
 		for (int i = 0; i < copy.row; i++)
-			data[i] = new int[copy.col];
+			data[i] = (T*) new T[copy.col];
 		for (int i = 0; i < copy.row; i++)
 			for (int j = 0; j < copy.col; j++)
 				data[i][j] = copy.data[i][j];
@@ -151,9 +151,9 @@ public:
 		col = mat.col;
 		if (data != nullptr)
 			delete[] data;
-		data = new int* [mat.row];
+		data = (T**) new T * [mat.row];
 		for (int i = 0; i < mat.row; i++)
-			data[i] = new int[mat.col];
+			data[i] = (T*) new T[mat.col];
 		for (int i = 0; i < mat.row; i++)
 			for (int j = 0; j < mat.col; j++)
 				data[i][j] = mat.data[i][j];
@@ -164,14 +164,14 @@ public:
 
 	matrix operator + (const matrix& mat)
 	{
-		matrix tmp;
+		matrix <T> tmp;
 		if (this->col != mat.col && this->row != mat.row)
 			throw "Incompatible dimensions";
 		tmp.row = this->row;
 		tmp.col = this->col;
-		tmp.data = new int* [this->row];
+		tmp.data = (T**) new T * [this->row];
 		for (int i = 0; i < tmp.row; i++)
-			tmp.data[i] = new int[tmp.col];//создание массива
+			tmp.data[i] = (T*) new T[tmp.col];//создание массива
 
 		for (int i = 0; i < tmp.row; i++)
 			for (int j = 0; j < tmp.col; j++)
@@ -189,9 +189,9 @@ public:
 			throw "Incompatible dimensions";
 		tmp.row = this->row;
 		tmp.col = mat.col;
-		tmp.data = new int* [this->row];
+		tmp.data = (T**) new T * [this->row];
 		for (int i = 0; i < tmp.row; i++)
-			tmp.data[i] = new int[tmp.col];//создание массива
+			tmp.data[i] = (T*) new T[tmp.col];//создание массива
 
 		for (int i = 0; i < tmp.row; i++)
 			for (int j = 0; j < tmp.col; j++)
@@ -207,14 +207,14 @@ public:
 		return tmp;
 	}
 
-	matrix operator * (float num)
+	matrix operator * (int num)
 	{
-		matrix tmp;
+		matrix <T> tmp;
 		tmp.row = this->row;
 		tmp.col = this->col;
-		tmp.data = new int* [this->row];
+		tmp.data = (T**) new T * [this->row];
 		for (int i = 0; i < tmp.row; i++)
-			tmp.data[i] = new int[this->col];
+			tmp.data[i] = (T*) new T[this->col];
 		for (int i = 0; i < tmp.row; i++)
 			for (int j = 0; j < tmp.col; j++)
 				tmp.data[i][j] = this->data[i][j] * num;
@@ -232,7 +232,7 @@ public:
 
 
 };
-std::ostream& operator<< (std::ostream& out, const matrix& mat)
+std::ostream& operator<< (std::ostream& out, const matrix <int>& mat)
 {
 	for (int i = 0; i < mat.row; i++)
 	{
@@ -244,14 +244,18 @@ std::ostream& operator<< (std::ostream& out, const matrix& mat)
 }
 
 
+typedef matrix <int> IntMat;
+typedef vector <int> IntVec;
+
+
 int main()
 {
-	vector a(5);
+	vector <int> a(5);
 	std::cout << a;
 	a = a * 4;
 
 	std::cout << a;
-	vector b(8);
+	vector <int> b(8);
 	std::cout << b;
 	try
 	{
@@ -271,10 +275,12 @@ int main()
 		std::cout << "Fail! Incompatible dimensions \n";
 	}
 	std::cout << a;
-	matrix c(4, 7);
+
+
+	matrix <int> c(4, 7);
 	c = c * 2;
 	std::cout << c;
-	matrix d(7, 3);
+	matrix <int> d(7, 3);
 
 	try
 	{
